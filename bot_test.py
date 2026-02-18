@@ -6,6 +6,21 @@ from zoneinfo import ZoneInfo
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, Defaults
+import threading
+from flask import Flask
+
+app_web = Flask(__name__)
+
+@app_web.get("/")
+def home():
+    return "OK", 200
+
+def run_web():
+    port = int(os.environ.get("PORT", "10000"))
+    app_web.run(host="0.0.0.0", port=port)
+
+threading.Thread(target=run_web, daemon=True).start()
+
 
 # =========================
 # CONFIG (set these as ENV vars)
@@ -493,3 +508,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
